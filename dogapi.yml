@@ -1,0 +1,187 @@
+openapi: 3.1.1
+info:
+  title: Dog API Documentation
+  description: |
+      # About 
+      **[Dog API](https://dog.ceo/dog-api/)** is the internet's largest collection of open source dog pictures.
+  license:
+    name: MIT License
+    url: https://opensource.org/license/MIT
+  version: 0.0.1
+externalDocs:
+  description: External Documentation
+  url: https://dog.ceo/dog-api/documentation/
+tags:
+  - name: List All Breeds
+    description: List all breeds
+  - name: Random 
+    description: Returns a random image
+  - name: By Breed
+    description: Searches you can do based on breed.
+  - name: By Sub-Breed
+    description: Searches you can do using sub-breed.
+host: https://dog.ceo
+basePath: /api
+schemes:
+  - https
+server:
+  url: https://dog.ceo/api
+  description: Production server
+paths:
+  /breeds/list/all:
+    get:
+      tags:
+        - List All Breeds
+      summary: List all dog breeds
+      description: Returns the list of dog breeds available in Dog api
+      operationId: getBreeds
+      responses:
+        '200':
+          description: A list of dog breeds
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                    description: A mapping of dog breeds to their sub-breeds.
+                  status:
+                    type: string
+                    example: success
+                    description: The status of the response.
+                required:
+                  - message
+                  - status
+  /breeds/image/random:
+    get:
+      tags:
+        - Random
+      summary: Get random image
+      description: Returns a single random image from all dogs collection
+      operationId: imageRandom
+      responses:
+        '200':
+          description: A random dog image
+          content:
+              application/json:
+                schema:
+                  type: string
+                  properties:
+                    message:
+                        type: string
+                        example: "https://images.dog.ceo/breeds/terrier-yorkshire/img_2384.jpg"
+                        description: The random image url.
+                    status:
+                      type: string
+                      example: success
+                      desription: The status of the response.
+                  required:
+                    - message
+                    - status
+  /breed/{breedId}/images:
+    get:
+      tags:
+        - By Breed
+      summary: Get random image
+      description: Returns an array of all the images from a breed, e.g. hound
+      operationId: imageRandom
+      responses:
+        '200':
+          description: An array of dog images from a certain breed.
+          content:
+              application/json:
+                schema:
+                  type: string
+                  properties:
+                    message:
+                        type: array
+                        items: 
+                          type: string
+                        example: 
+                          message: ["https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg","https://images.dog.ceo/breeds/hound-afghan/n02088094_10263.jpg"]
+                        description: Array of images from a dog breed.
+                  required:
+                    - message
+  /breed/{breedId}/images/random:
+    get:
+      tags:
+        - By Breed
+      summary: Get random image of a breed.
+      description: Returns a random dog image from a breed, e.g. hound.
+      operationId: imageRandom
+      responses:
+        '200':
+          description: A random dog image from a breed.
+          content:
+              application/json:
+                schema:
+                  type: string
+                  properties:
+                    message:
+                        type: string
+                        example: "https://images.dog.ceo/breeds/hound-ibizan/n02091244_4885.jpg"
+                        description: The random image url.
+                    status:
+                      type: string
+                      example: success
+                      desription: The status of the response.
+                  required:
+                    - message
+                    - status
+  /breed/hound/images/random/{number}:
+    get:
+      tags:
+        - By Breed
+      summary: Get random image of a breed.
+      description: Return multiple random dog images from a breed, e.g. hound.
+      operationId: imageRandom
+      responses:
+        '200':
+          description: Return multiple random dog images from a breed, e.g. hound.
+          content:
+              application/json:
+                schema:
+                  type: string
+                  properties:
+                    message:
+                        type: string
+                        example: "https://dog.ceo/api/breed/hound/images/random/3"
+                        description: The random image url.
+                    status:
+                      type: string
+                      example: success
+                      desription: The status of the response.
+                  required:
+                    - message
+                    - status
+  /breed/{subbreedId}/list:
+    get:
+      tags:
+        - By Sub-Breed
+      summary: Get random image of a breed.
+      description: Return multiple random dog images from a breed, e.g. hound.
+      operationId: imageRandom
+      responses:
+        '200':
+          description: Return multiple random dog images from a breed, e.g. hound.
+          content:
+              application/json:
+                schema:
+                  type: string
+                  properties:
+                    message:
+                        type: string
+                        example: "https://dog.ceo/api/breed/hound/images/random/3"
+                        description: The random image url.
+                    status:
+                      type: string
+                      example: success
+                      desription: The status of the response.
+                  required:
+                    - message
+                    - status
