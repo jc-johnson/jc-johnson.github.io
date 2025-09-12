@@ -8,36 +8,30 @@ info:
     name: MIT License
     url: https://opensource.org/license/MIT
   version: 0.0.1
-server:
-  url: https://dog.ceo/api
+servers:
+- url: https://dog.ceo/api
   description: Production server
 externalDocs:
   description: External Documentation
   url: https://dog.ceo/dog-api/documentation/
 tags:
-  - name: List All 
-    description: List all breeds
   - name: Random 
     description: Returns a random image
-  - name: By Breed
+  - name: Breed
     description: Searches you can do based on breed.
-  - name: By Sub-Breed
+  - name: SubBreed
     description: Searches you can do using sub-breed.
-host: https://dog.ceo
-basePath: /api
-schemes:
-  - https
 paths:
   /breeds/list/all:
     get:
       tags:
-        - List All 
-      summary: List all dog breeds
-      description: Returns the list of dog breeds available in Dog api
+        - Breed 
+      summary: List dog breeds.
+      description: Returns a list of available dog breeds.
       operationId: getBreeds
       responses:
         '200':
-          description: A list of dog breeds
+          description: Successfully returns a list of dog breeds.
           content:
             application/json:
               schema:
@@ -50,11 +44,11 @@ paths:
                       items:
                         type: string
                     example: [ "affenpinscher": [], "african": [], "airedale": [], "akita": []]
-                    description: A map of dog breeds to their sub-breeds (if any)
+                    description: A map of dog breeds to their sub-breeds (if any).
                   status:
                     type: string
                     enum: [success, error]
-                    description: Status of the API response
+                    description: Status of the API response.
                 required:
                   - message
                   - status
@@ -62,12 +56,12 @@ paths:
     get:
       tags:
         - Random
-      summary: Get random image
-      description: Returns a single random image from all dogs collection
+      summary: Returns random image.
+      description: Returns a random dog image URL. 
       operationId: breedsImageRandom
       responses:
         '200':
-          description: A random dog image
+          description: A random dog image.
           content:
             application/json:
               schema:
@@ -77,18 +71,18 @@ paths:
                     type: string
                     format: uri
                     example: "https://images.dog.ceo/breeds/mastiff-bull/n02108422_4793.jpg"
-                    description: URL of the dog image
+                    description: URL of the dog image.
                   status:
                     type: string
                     enum: [success, error]
-                    description: Status of the API response
+                    description: Status of the API response.
                 required:
                   - message
                   - status
   /breed/{breedId}/images:
     get:
       tags:
-        - By Breed
+        - Breed
       summary: Returns a lists of images for a specific dog breed.
       description: Returns a list of image URLs for the specified dog breed, e.g. hound.
       operationId: allBreedImages
@@ -96,12 +90,12 @@ paths:
         - name: breedId
           in: path
           required: true
-          description: The ID or name of the dog breed (e.g. `hound-afghan`)
+          description: The ID or name of the dog breed (e.g. `hound-afghan`).
           schema:
             type: string
       responses:
         '200':
-          description: A list of image URLs for the breed
+          description: Successfully returned a list of image URLs.
           content:
             application/json:
               schema:
@@ -112,32 +106,35 @@ paths:
                     items:
                       type: string
                       format: uri
-                    description: List of dog image URLs
+                    description: List of dog image URLs.
+                    example: ["https://images.dog.ceo/breeds/corgi-cardigan/miss-muffin.jpg", "https://images.dog.ceo/breeds/corgi-cardigan/n02113186_10077.jpg","https://images.dog.ceo/breeds/corgi-cardigan/n02113186_1016.jpg"]
                   status:
                     type: string
                     enum: [success, error]
-                    description: Status of the response
+                    description: Status of the response.
                 required:
                   - message
                   - status
         '400':
-          description: Invalid breed ID supplied
+          description: Invalid breed ID supplied.
         '404':
-          description: Breed not found
+          description: Breed not found.
   /breed/{breedId}/images/random:
     get:
-      summary: Get a random image for a specific dog breed
+      tags: 
+        - Random
+      summary: Get random dog breed image.
       description: Returns a single random image URL for the specified dog breed.
       parameters:
         - name: breedId
           in: path
           required: true
-          description: The ID or name of the dog breed (e.g. `mastiff-bull`, `hound-afghan`)
+          description: The ID or name of the dog breed (e.g. `mastiff-bull`, `hound-afghan`).
           schema:
             type: string
       responses:
         '200':
-          description: A random image URL for the breed
+          description: Successfully returned an image URL.
           content:
             application/json:
               schema:
@@ -146,34 +143,43 @@ paths:
                   message:
                     type: string
                     format: uri
-                    description: URL of the dog image
+                    description: URL of the dog image.
+                    example: https://images.dog.ceo/breeds/hound-afghan/n02088094_3937.jpg
                   status:
                     type: string
                     enum: [success, error]
-                    description: Status of the response
+                    description: Status of the response.
                 required:
                   - message
                   - status
         '400':
-          description: Invalid breed ID supplied
+          description: Invalid breed ID supplied.
         '404':
-          description: Breed not found
-  /breed/hound/images/random/{number}:
+          description: Breed not found.
+  /breed/{breedId}/images/random/{number}:
     get:
-      summary: Get multiple random images for the "hound" breed
-      description: Returns a specified number of random image URLs for the "hound" breed.
+      tags:
+        - Random
+      summary: Get dog breed images.
+      description: Returns a specified number of random image URLs for the specified dog breed.
       parameters:
+        - name: breedId
+          in: path
+          required: true
+          description: Name of dog breed.
+          schema:
+            type: string
         - name: number
           in: path
           required: true
-          description: Number of random images to return
+          description: Number of random images to return.
           schema:
             type: integer
             minimum: 1
             maximum: 50  # adjust based on your API limits
       responses:
         '200':
-          description: A list of random image URLs for the hound breed
+          description: Successfully returned a list of image URLs.
           content:
             application/json:
               schema:
@@ -184,32 +190,35 @@ paths:
                     items:
                       type: string
                       format: uri
-                    description: List of random dog image URLs
+                    description: List of random dog image URLs.
+                    example: ["https://images.dog.ceo/breeds/beagle/n02088364_10354.jpg", "https://images.dog.ceo/breeds/beagle/n02088364_17671.jpg"]
                   status:
                     type: string
                     enum: [success, error]
-                    description: Status of the response
+                    description: Status of the response.
                 required:
                   - message
                   - status
         '400':
-          description: Invalid number supplied
+          description: Invalid number supplied.
         '404':
-          description: Breed not found
+          description: Breed not found.
   /breed/{subbreedId}/list:
     get:
-      summary: Get list of sub-breeds for a specific breed
-      description: Returns a list of sub-breed names for the specified dog breed.
+      tags:
+        - SubBreed
+      summary: Get list of sub-breeds.
+      description: Returns a list of sub-breeds for the specified dog breed.
       parameters:
         - name: subbreedId
           in: path
           required: true
-          description: The ID or name of the dog breed (e.g., `bulldog`, `hound`)
+          description: The ID or name of the dog breed (e.g., `bulldog`, `hound`).
           schema:
             type: string
       responses:
         '200':
-          description: A list of sub-breeds for the specified breed
+          description: Successfully returned a list of sub-breeds.
           content:
             application/json:
               schema:
@@ -220,14 +229,15 @@ paths:
                     items:
                       type: string
                     description: List of sub-breed names
+                    example: ["afghan", "basset", "blood", "english", "ibizan", "plott", "walker"]
                   status:
                     type: string
                     enum: [success, error]
-                    description: Status of the response
+                    description: Status of the response.
                 required:
                   - message
                   - status
         '400':
-          description: Invalid breed name supplied
+          description: Invalid breed name supplied.
         '404':
-          description: Breed not found or has no sub-breeds
+          description: Breed not found or has no sub-breeds.
